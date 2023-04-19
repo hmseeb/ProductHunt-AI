@@ -19,7 +19,7 @@ async def homepage():
     page = await scraper.newPage()
     await page.goto('https://www.producthunt.com/topics/artificial-intelligence')
 
-    SCROLL_PAUSE_TIME = 3.5
+    SCROLL_PAUSE_TIME = 5
 
     last_height = await page.evaluate('document.body.scrollHeight')
 
