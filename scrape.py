@@ -11,7 +11,7 @@ headers = {
 conn = sqlite3.connect('producthunt.db')
 cursor = conn.cursor()
 cursor.execute(
-    '''CREATE TABLE IF NOT EXISTS producthunt(title text, tagline text, description text, reviews int, rating int, link text)''')
+    '''CREATE TABLE IF NOT EXISTS producthunt(title text, tagline text, description text, reviews text, rating int, link text)''')
 
 
 async def homepage():
@@ -19,7 +19,7 @@ async def homepage():
     page = await scraper.newPage()
     await page.goto('https://www.producthunt.com/topics/artificial-intelligence')
 
-    SCROLL_PAUSE_TIME = 5
+    SCROLL_PAUSE_TIME = 3.5
 
     last_height = await page.evaluate('document.body.scrollHeight')
 
@@ -70,7 +70,7 @@ async def scrape(response):
             '.color-lighter-grey.fontSize-14.fontWeight-600.noOfLines-undefined.styles_format__w0VVk.flex.align-center').text()
 
         cursor.execute('''INSERT INTO producthunt(title, tagline, description, reviews, rating, link) VALUES(?,?,?,?,?,?)''',
-                       (title, tagline, description, int(reviews.replace("reviews", "")), len(rating), link))
+                       (title, tagline, description, reviews.replace("reviews", ""), len(rating), link))
         conn.commit()
     except Exception as e:
         print(e)
